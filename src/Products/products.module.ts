@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Products } from 'src/entities/products.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { SharedModule } from 'src/shared-module/shared-module.module';
+import { CategoriesModule } from 'src/categories/categories.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Products]), SharedModule],
+    imports: [TypeOrmModule.forFeature([Products]), SharedModule, CategoriesModule],
     controllers: [ProductsController],
     providers: [ProductsService, CloudinaryService],
     exports: [ProductsService]

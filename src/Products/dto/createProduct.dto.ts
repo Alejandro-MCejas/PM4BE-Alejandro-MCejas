@@ -36,4 +36,7 @@ export class CreateProductDto{
     })
     @IsString()
     imgUrl: string
+
+    @IsString()
+    category: string 
 }

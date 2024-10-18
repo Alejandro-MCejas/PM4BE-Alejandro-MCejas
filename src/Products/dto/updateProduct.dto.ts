@@ -43,4 +43,8 @@ export class UpdateProductDto extends PartialType(CreateProductDto){
     @IsOptional()
     @IsString()
     imgUrl?: string
+
+    @IsOptional()
+    @IsString()
+    category?: string
 }
