@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Nest API Ecommerce')
-    .setDescription('App Demo para el M4 Backend')
+    .setDescription('API NestJS para Ecommerce de productos y categorias en el que los usuarios pueden ver productos sin iniciar sesión o pueden registrarse, iniciar sesión y comprar productos')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
