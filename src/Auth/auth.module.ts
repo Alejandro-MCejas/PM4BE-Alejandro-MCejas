@@ -8,7 +8,7 @@ import { SharedModule } from "src/shared-module/shared-module.module";
 @Module({
     imports: [UsersModule, SharedModule],
     controllers: [AuthController],
-    providers: [AuthService],
+    providers: [AuthService]
     
 })
 

@@ -24,7 +24,7 @@ export class UsersService {
     async getUserByIdService(id: string) {
 
         const user = await this.usersRepository.findOne({
-            where: { id: id },
+            where: { id },
             select: ['id', 'email', 'name', 'address', 'phone', 'country', 'city'],
             relations: ['orders']
         })
@@ -33,12 +33,13 @@ export class UsersService {
     }
 
     async createUserService(user: CreateUserDto) {
-        const newUser = this.usersRepository.create(user)
-        return await this.usersRepository.save(newUser)
+        return await this.usersRepository.save(
+            this.usersRepository.create(user)
+        )
     }
 
     async updateUserService(id: string, user: UpdateUserDto) {
-        const existingUser = await this.usersRepository.findOne({ where: { id: id } })
+        const existingUser = await this.usersRepository.findOne({ where: { id } })
 
         if (!existingUser) {
             return null
@@ -50,7 +51,7 @@ export class UsersService {
     }
 
     async deleteUserService(id: string) {
-        const userToDelete = await this.usersRepository.findOne({ where: { id: id } })
+        const userToDelete = await this.usersRepository.findOne({ where: { id } })
         await this.usersRepository.delete(id)
         return userToDelete
     }

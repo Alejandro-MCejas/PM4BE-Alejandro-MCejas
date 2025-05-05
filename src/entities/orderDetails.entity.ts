@@ -22,13 +22,13 @@ export class OrderDetails {
     @ApiProperty({
         description: 'The id of the order'
     })
-    @OneToOne(() => Orders, order => order.orderDetails)
+    @OneToOne(() => Orders, order => order.orderDetails, { onDelete: 'CASCADE' })
     @JoinColumn()
     order: Orders
 
     @ApiProperty({
         description: 'The id of the products in the order'
     })
-    @ManyToMany(() => Products, product => product.orderDetails)
+    @ManyToMany(() => Products, product => product.orderDetails, { onDelete: 'CASCADE'})
     products: Products[]
 }

@@ -15,8 +15,6 @@ export class AuthService {
 
     async signInService(email: string, password: string) {
 
-        
-        
         const user = await this.usersService.findUserByEmailService(email)
 
         if(!user) {
@@ -32,11 +30,6 @@ export class AuthService {
         const token = await this.createToken(user)
         
         return { token }
-
-        // if (!user || user.password !== password) {
-        //     throw new UnauthorizedException('Email o contraseña incorrectos')
-        // }
-        // return true
     }
 
     async signUpService(user: SignUpDto) {

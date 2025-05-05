@@ -15,7 +15,6 @@ export class OrdersService {
         private readonly usersService: UsersService,
         private readonly productsService: ProductsService,
         private readonly orderDetailService: OrderDetailService
-
     ) { }
 
 
@@ -23,16 +22,16 @@ export class OrdersService {
         const { userId, products } = order
         const user = await this.usersService.getUserByIdService(userId)
 
-        
+
         const productsWithStock = await this.productsService.getProductsWithStockService(products)
 
 
-        if(productsWithStock.length === 0){
+        if (productsWithStock.length === 0) {
             throw new Error('No hay stock en ninguno de los productos recibidos')
         }
 
         if (productsWithStock.length < products.length) {
-           throw new Error('No hay stock en algunos de los productos recibidos')
+            throw new Error('No hay stock en algunos de los productos recibidos')
         }
 
         const structureOfOrder = {
@@ -44,7 +43,7 @@ export class OrdersService {
             this.ordersRepository.create(structureOfOrder)
         )
 
-        
+
 
         for (const product of productsWithStock) {
             await this.productsService.reduceProductStockService(product.id)
@@ -52,13 +51,13 @@ export class OrdersService {
 
         const total = await this.calculateTotal(productsWithStock)
 
-        
+
         const orderDetail = new CreateOrderDetailDto()
         orderDetail.price = total
         orderDetail.order = newOrder
         orderDetail.products = productsWithStock
-        
-        
+
+
         const newOrderDetail = await this.orderDetailService.createOrderDetailService(orderDetail)
 
         const orderResponse = {
@@ -78,7 +77,7 @@ export class OrdersService {
         let total: number = 0;
         for (const product of products) {
             total += Number(product.price)
-            
+
         }
 
         return total
@@ -91,14 +90,26 @@ export class OrdersService {
             throw new Error('La orden no existe')
         }
 
-        
+
         const orderDetail = await this.orderDetailService.getOrderDetailByOrderIdService(order.id, ['products'])
-        
+
         const orderResponse = {
             order,
             orderDetail: orderDetail.products
         }
 
         return orderResponse
+    }
+
+    async deleteOrderService(orderId: string) {
+        const order = await this.ordersRepository.findOne({ where: { id: orderId } })
+
+        if (!order) {
+            throw new Error('La orden no existe')
+        }
+
+        await this.ordersRepository.delete(order)
+
+        return order
     }
 }
