@@ -9,6 +9,8 @@ dotenv.config({
 const isProduction = process.env.NODE_ENV === 'production'
 
 
+
+
 export const dataSourceOptions: DataSourceOptions = isProduction
     ? {
         type: 'postgres',
@@ -19,6 +21,7 @@ export const dataSourceOptions: DataSourceOptions = isProduction
         ssl: true,
         extra: {
             ssl: {
+                ca: process.env.SSL_CA?.split('\\n').join('\n'),
                 rejectUnauthorized: false
             }
         },
