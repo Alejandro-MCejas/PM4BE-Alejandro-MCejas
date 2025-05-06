@@ -20,7 +20,7 @@ export const dataSourceOptions: DataSourceOptions = isProduction
         synchronize: true,
         ssl: {
             ca: process.env.SSL_CA?.split('\\n').join('\n'),
-            rejectUnauthorized: true
+            rejectUnauthorized: false
         },
         logging: false
     }
