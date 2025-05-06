@@ -22,7 +22,7 @@ export const dataSourceOptions: DataSourceOptions = isProduction
         extra: {
             ssl: {
                 ca: process.env.SSL_CA?.split('\\n').join('\n'),
-                rejectUnauthorized: false
+                rejectUnauthorized: true
             }
         },
         logging: false
