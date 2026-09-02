@@ -14,7 +14,7 @@ export class ProductsSeed {
     ) { }
 
     async findCategoryByName(category: string) {
-        const foundCategory = this.categoriesRepository.findOne({
+        const foundCategory = await this.categoriesRepository.findOne({
             where: { name: category }
         })
 
@@ -26,19 +26,23 @@ export class ProductsSeed {
     }
 
 
-    async seedProducts(){
-        const existingProductNames = (await this.productsRepository.find()).map(product => product.name)
+    async seedProducts() {
+        const existingProductsCount = await this.productsRepository.count()
+
+        if (existingProductsCount > 0) {
+            return
+        }
 
         for (const productData of productsMock) {
-            if(!existingProductNames.includes(productData.name)){
-                const product = new Products()
-                product.name = productData.name
-                product.description = productData.description
-                product.price = productData.price
-                product.stock = productData.stock
-                product.category = await this.findCategoryByName(productData.category)
-                await this.productsRepository.save(product)
-            }
+            const product = new Products();
+
+            product.name = productData.name;
+            product.description = productData.description;
+            product.price = productData.price;
+            product.stock = productData.stock;
+            product.category = await this.findCategoryByName(productData.category);
+
+            await this.productsRepository.save(product);
         }
     }
 }

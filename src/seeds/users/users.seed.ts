@@ -10,20 +10,20 @@ import * as bcrypt from 'bcryptjs'
 export class UsersSeed {
     constructor(@InjectRepository(Users) private readonly usersRepository: Repository<Users>) { }
 
-
-
     async seedUsers() {
+        const existingUsersCount = await this.usersRepository.count();
+
+        if (existingUsersCount > 0) {
+            return;
+        }
+
         for (const user of usersMock) {
-            const existingUser = await this.usersRepository.findOne({ where: { email: user.email } })
+            const hashedPassword = await bcrypt.hash(user.password, 10);
 
-            if (!existingUser) {
-                const hashedPassword = await bcrypt.hash(user.password, 10)
-
-                await this.usersRepository.save({
-                    ...user,
-                    password: hashedPassword
-                })
-            }
+            await this.usersRepository.save({
+                ...user,
+                password: hashedPassword
+            });
         }
     }
 }

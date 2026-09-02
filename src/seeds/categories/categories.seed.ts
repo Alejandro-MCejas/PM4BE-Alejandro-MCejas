@@ -10,16 +10,17 @@ export class CategoriesSeed {
     constructor(@InjectRepository(Categories) private readonly categoriesRepository: Repository<Categories>) { }
 
     async seedCategories() {
-        const existingCategories = await this.categoriesRepository.find({
-            where: { name: In(categoriesMock) }
-        })
+        const existingCategoriesCount = await this.categoriesRepository.count()
+
+        if (existingCategoriesCount > 0) {
+            return
+        }
 
         for (const categoryName of categoriesMock) {
-            if (!existingCategories.some(category => category.name === categoryName)) {
-                const category = new Categories()
-                category.name = categoryName
-                await this.categoriesRepository.save(category)
-            }
+            const category = new Categories();
+            category.name = categoryName;
+
+            await this.categoriesRepository.save(category);
         }
     }
 }

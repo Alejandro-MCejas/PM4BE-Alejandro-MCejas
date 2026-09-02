@@ -25,16 +25,12 @@ async function bootstrap() {
 
   const categoriesSeed = app.get(CategoriesSeed)
   await categoriesSeed.seedCategories()
-  console.log('Categories seeded');
 
   const productsSeed = app.get(ProductsSeed)
   await productsSeed.seedProducts()
-  console.log('Products seeded');
 
   const usersSeed = app.get(UsersSeed)
   await usersSeed.seedUsers()
-  console.log('Users seeded');
-  
 
   await app.listen(process.env.PORT || 3000);
 
