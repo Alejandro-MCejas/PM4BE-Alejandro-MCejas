@@ -29,6 +29,7 @@ export class CloudinaryService {
             const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
                 if (error) {
                     reject(error)
+                    return
                 }
                 resolve(result.secure_url)
             })
@@ -36,10 +37,5 @@ export class CloudinaryService {
             stream.write(buffer)
             stream.end()
         })
-    }
-
-    async getUrl(publicId: string): Promise<string>{
-        const result = await cloudinary.api.resource(publicId)
-        return result
     }
 }

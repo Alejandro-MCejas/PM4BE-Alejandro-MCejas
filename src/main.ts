@@ -9,8 +9,15 @@ import { UsersSeed } from './seeds/users/users.seed';
 
 
 async function bootstrap() {
+
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true
+  }));
+
   app.use(loggerGlobal);
 
   const swaggerConfig = new DocumentBuilder()
@@ -29,8 +36,10 @@ async function bootstrap() {
   const productsSeed = app.get(ProductsSeed)
   await productsSeed.seedProducts()
 
-  const usersSeed = app.get(UsersSeed)
-  await usersSeed.seedUsers()
+  if (process.env.NODE_ENV !== 'production') {
+    const usersSeed = app.get(UsersSeed);
+    await usersSeed.seedUsers();
+  }
 
   await app.listen(process.env.PORT || 3000);
 

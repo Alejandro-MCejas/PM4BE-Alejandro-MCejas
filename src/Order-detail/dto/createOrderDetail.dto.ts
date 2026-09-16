@@ -1,18 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { Orders } from "src/entities/orders.entity"
+import { Products } from "src/entities/products.entity"
 
 export class CreateOrderDetailDto {
-    @ApiProperty({
-        description: 'The price of the product',
-    })
+
     price: number
 
-    @ApiProperty({
-        description: 'The order',
-    })
-    order: object
+    order: Orders
 
-    @ApiProperty({
-        description: 'The products',
-    })
-    products: Array<object>
+    products: Products[]
 }

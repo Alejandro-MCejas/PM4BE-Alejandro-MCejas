@@ -3,29 +3,21 @@ import { OrdersController } from "./orders.controller";
 import { OrdersService } from "./orders.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Orders } from "src/entities/orders.entity";
-import { Users } from "src/entities/users.entity";
-import { OrderDetails } from "src/entities/orderDetails.entity";
-import { Products } from "src/entities/products.entity";
 import { UsersModule } from "src/Users/users.module";
 import { ProductsModule } from "src/Products/products.module";
-import { UsersService } from "src/Users/users.service";
-import { ProductsService } from "src/Products/products.service";
-import { OrderDetailService } from "../Order-detail/order-detail.service";
 import { SharedModule } from "src/shared-module/shared-module.module";
-import { CategoriesModule } from "src/categories/categories.module";
-
-
+import { OrderDetailModule } from "src/Order-detail/order-detail.module";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Orders, Users, OrderDetails, Products]),
+    imports: [TypeOrmModule.forFeature([Orders]),
         SharedModule,
         UsersModule,
-        ProductsModule, 
-        CategoriesModule
+        ProductsModule,
+        OrderDetailModule
     ],
     controllers: [OrdersController],
-    providers: [OrdersService, UsersService, ProductsService, OrderDetailService],
+    providers: [OrdersService],
 })
 
 export class OrdersModule { }

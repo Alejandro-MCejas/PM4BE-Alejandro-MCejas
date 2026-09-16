@@ -2,24 +2,23 @@ import { UserRole } from "src/Users/enum/role.enum";
 
 export const usersMock = [
     {
-        "name": "Alejandro Cejas",
-        "email": "ale@gmail.com",
-        "password": "Alejandro123@",
-        "phone": "89437934",
-        "country": "Argentina",
-        "address": "Cordoba 530",
-        "city": "Cordoba",
-        "admin": UserRole.USER
+        name: "Demo User",
+        email: process.env.SEED_USER_EMAIL,
+        password: process.env.SEED_USER_PASSWORD,
+        phone: "000000000",
+        country: "Argentina",
+        address: "Demo 123",
+        city: "Cordoba",
+        admin: UserRole.USER
     },
-
     {
-        "name": "Alejandro Admin",
-        "email": "admin@gmail.com",
-        "password": "Admin123@",
-        "phone": "328472389",
-        "country": "Argentina",
-        "address": "Cordoba 530",
-        "city": "Cordoba",
-        "admin": UserRole.ADMIN
+        name: "Demo Admin",
+        email: process.env.SEED_ADMIN_EMAIL,
+        password: process.env.SEED_ADMIN_PASSWORD,
+        phone: "000000000",
+        country: "Argentina",
+        address: "Demo 123",
+        city: "Cordoba",
+        admin: UserRole.ADMIN
     }
 ]

@@ -18,6 +18,11 @@ export class UsersSeed {
         }
 
         for (const user of usersMock) {
+            
+            if (!user.email || !user.password) {
+                throw new Error('Seed user credentials are not configured');
+            }
+
             const hashedPassword = await bcrypt.hash(user.password, 10);
 
             await this.usersRepository.save({

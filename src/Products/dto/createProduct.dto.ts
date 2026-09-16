@@ -1,12 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger"
-import {IsNumber, IsString } from "class-validator"
+import { IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Length, Min } from "class-validator"
 
-export class CreateProductDto{
+export class CreateProductDto {
     @ApiProperty({
         description: 'The name of the product',
         example: 'Moto e7'
     })
     @IsString()
+    @IsNotEmpty()
+    @Length(2, 50)
     name: string
 
     @ApiProperty({
@@ -14,29 +16,41 @@ export class CreateProductDto{
         example: 'Good product'
     })
     @IsString()
+    @IsNotEmpty()
+    @Length(5, 500)
     description: string
 
     @ApiProperty({
         description: 'The price of the product',
-        example: '1000'
+        example: 1000
     })
     @IsNumber()
+    @Min(0)
     price: number
 
     @ApiProperty({
         description: 'The stock of the product',
-        example: '20'
+        example: 20
     })
-    @IsNumber()
+    @IsInt()
+    @Min(0)
     stock: number
 
     @ApiProperty({
-        description: 'The image of the product',
+        description: 'The image URL of the product',
         example: 'htpps://example.com/image.jpg'
     })
     @IsString()
+    @IsNotEmpty()
+    @IsUrl()
     imgUrl: string
 
+    @ApiProperty({
+        description: 'The category name of the product',
+        example: 'Tecnología'
+    })
     @IsString()
-    category: string 
+    @IsNotEmpty()
+    @Length(2, 50)
+    category: string
 }

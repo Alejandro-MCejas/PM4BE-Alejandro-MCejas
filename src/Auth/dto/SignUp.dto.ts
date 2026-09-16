@@ -6,7 +6,7 @@ import { IsString, IsNotEmpty, IsEmail, Matches, Length, IsNumberString, IsOptio
 export class SignUpDto {
     @ApiProperty({
         description: 'The name of the user',
-        example: 'Alejandro Cejas',
+        example: 'Juan Perez',
     })
     @IsString()
     @IsNotEmpty()
@@ -15,14 +15,15 @@ export class SignUpDto {
 
     @ApiProperty({
         description: 'The email of the user',
-        example: 'ale@gmail.com',
+        example: 'juan@example.com',
     })
     @IsEmail()
+    @IsNotEmpty()
     email: string
 
     @ApiProperty({
         description: 'The password of the user',
-        example: 'Alejandro123@'
+        example: 'Juan123@'
     })
     @IsString()
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,15}$/)
@@ -30,7 +31,7 @@ export class SignUpDto {
 
     @ApiProperty({
         description: 'The confirm password of the user',
-        example: 'Alejandro123@'
+        example: 'Juan123@'
     })
     @IsNotEmpty()
     @IsString()
@@ -38,15 +39,16 @@ export class SignUpDto {
 
     @ApiProperty({
         description: 'The address of the user',
-        example: 'Cordoba 530'
+        example: 'Av. Ejemplo 123'
     })
     @IsString()
+    @IsNotEmpty()
     @Length(3, 80)
     address: string
 
     @ApiProperty({
         description: 'The phone of the user',
-        example: '32894732784'
+        example: '3511234567'
     })
     @IsNumberString()
     @IsNotEmpty()
@@ -63,7 +65,7 @@ export class SignUpDto {
 
     @ApiProperty({
         description: 'The city of the user',
-        example: 'Cordoba'
+        example: 'Córdoba'
     })
     @IsOptional()
     @IsString()

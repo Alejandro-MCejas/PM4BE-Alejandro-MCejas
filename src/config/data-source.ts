@@ -16,8 +16,8 @@ export const dataSourceOptions: DataSourceOptions = {
     database: process.env.DB_NAME,
     entities: ["dist/**/*.entity{.ts,.js}"],
     migrations: ["dist/migration/*{.ts,.js}"],
-    synchronize: true,
-    logging: false,
+    synchronize: process.env.NODE_ENV === 'development',
+    logging: false
 }
 
 export const postgresDataSourceConfig = registerAs('postgres', () => dataSourceOptions)

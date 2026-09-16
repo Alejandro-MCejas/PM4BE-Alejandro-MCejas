@@ -7,9 +7,9 @@ import { ProductsService } from '../Products/products.service';
 export class FileUploadService {
     constructor(private readonly cloudinaryService: CloudinaryService,
         private readonly productsService: ProductsService
-    ){}
+    ) { }
 
-    async uploadFileAndLinkToProductService(id: string, file: Express.Multer.File){
+    async uploadFileAndLinkToProductService(id: string, file: Express.Multer.File) {
         const url = await this.uploadFileService({
             fieldname: file.fieldname,
             buffer: file.buffer,
@@ -22,11 +22,7 @@ export class FileUploadService {
         return { imgUrl: url }
     }
 
-    async uploadFileService(file: UploadFileDto){
+    async uploadFileService(file: UploadFileDto) {
         return this.cloudinaryService.uploadFile(file.buffer, file.originalname)
-    }
-
-    async getFileUrlService(publicId: string){
-        return this.cloudinaryService.getUrl(publicId)
     }
 }

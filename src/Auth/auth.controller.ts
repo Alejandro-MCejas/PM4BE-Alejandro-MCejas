@@ -12,22 +12,12 @@ export class AuthController {
 
     @Post('signin')
     async signInController(@Body() user: LoginUserDto) {
-        // const { email, password } = user
-
-        // const data = await this.authService.signInService(email, password)
-
-        // if (!data) {
-        //     return { message: "Email o contraseña incorrectos" }
-        // }
-
-        // return { message: "Login correcto" }
-
         return await this.authService.signInService(user.email, user.password)
     }
 
     @Post('signup')
-    async signUpController(@Body() user: SignUpDto) { 
-        if(user.password !== user.confirmPassword){
+    async signUpController(@Body() user: SignUpDto) {
+        if (user.password !== user.confirmPassword) {
             throw new BadRequestException('Las contraseñas no coinciden')
         }
 

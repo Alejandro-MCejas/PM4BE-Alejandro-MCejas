@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { UserRole } from "./enum/role.enum";
 
@@ -7,22 +7,24 @@ import { UserRole } from "./enum/role.enum";
 export class RoleGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) { }
 
-    async canActivate(context: ExecutionContext): Promise<boolean> {
+    canActivate(context: ExecutionContext): boolean {
 
-        const requiredRoles = this.reflector.get<UserRole[]>('roles', context.getHandler())
-        console.log(requiredRoles)
+        const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>('roles', [
+            context.getHandler(),
+            context.getClass()
+        ])
 
         if (!requiredRoles) {
-            throw new UnauthorizedException('No se especifico un role')
+            return true
         }
 
         const request = context.switchToHttp().getRequest()
         const user = request.user
 
         if (!user || !requiredRoles.includes(user.roles)) {
-            throw new UnauthorizedException('No tienes permiso para realizar esta accion')
+            throw new ForbiddenException('No tienes permiso para realizar esta accion')
         }
 
-       return true
+        return true
     }
 }

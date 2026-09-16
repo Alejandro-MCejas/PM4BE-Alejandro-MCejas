@@ -1,53 +1,72 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ProductsService } from "./products.service";
-import { Response } from "express";
 import { CreateProductDto } from "./dto/createProduct.dto";
 import { UpdateProductDto } from "./dto/updateProduct.dto";
 import { AuthGuard } from "src/Auth/AuthGuard.guard";
 import { RoleGuard } from "src/Users/RoleGuard.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { UserRole } from "src/Users/enum/role.enum";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from "@nestjs/swagger";
+import { ProductResponseDto } from "./dto/ProductResponseDto.dto";
 
 @ApiTags('Products')
+@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
     constructor(private readonly productsService: ProductsService) { }
 
     @Get()
-    async getProductsController(@Query('page') page: number = 1, @Query('limit') limit: number = 5, @Res() res: Response) {
-        const products = await this.productsService.getProductsService(page, limit)
-        return res.status(200).json(products)
+    @ApiOkResponse({
+        type: ProductResponseDto,
+        isArray: true,
+    })
+    async getProductsController(@Query('page') page: number = 1, @Query('limit') limit: number = 5) {
+        return await this.productsService.getProductsService(page, limit)
     }
 
     @Get(':id')
-    async getProductByIdController(@Param('id', new ParseUUIDPipe()) id: string, @Res() res: Response) {
-        const product = await this.productsService.getProductByIdService(id)
-        return res.status(200).json(product)
+    @ApiOkResponse({
+        type: ProductResponseDto
+    })
+    async getProductByIdController(@Param('id', new ParseUUIDPipe()) id: string) {
+        return await this.productsService.getProductByIdService(id)
     }
 
-    @ApiBearerAuth()
     @Post()
-    @UseGuards(AuthGuard)
-    async createProductController(@Body() product: CreateProductDto, @Res() res: Response) {
-        const newProduct = await this.productsService.createProductService(product)
-        return res.status(201).json({ id: newProduct.id })
+    @UseGuards(AuthGuard, RoleGuard)
+    @Roles(UserRole.ADMIN)
+    @ApiCreatedResponse({
+        type: ProductResponseDto
+    })
+    async createProductController(@Body() product: CreateProductDto) {
+        return await this.productsService.createProductService(product)
     }
 
-    @ApiBearerAuth()
     @Put(':id')
     @UseGuards(AuthGuard, RoleGuard)
     @Roles(UserRole.ADMIN)
-    async updateProductController(@Body() product: UpdateProductDto, @Param('id', new ParseUUIDPipe()) id: string, @Res() res: Response) {
-        const updatedProduct = await this.productsService.updateProductService(id, product)
-        return res.status(200).json({ id: updatedProduct.id })
+    @ApiOkResponse({
+        type: ProductResponseDto
+    })
+    async updateProductController(@Body() product: UpdateProductDto, @Param('id', new ParseUUIDPipe()) id: string) {
+        return await this.productsService.updateProductService(id, product)
     }
 
-    @ApiBearerAuth()
     @Delete(':id')
-    @UseGuards(AuthGuard)
-    async deleteProductController(@Param('id', new ParseUUIDPipe()) id: string, @Res() res: Response) {
+    @UseGuards(AuthGuard, RoleGuard)
+    @Roles(UserRole.ADMIN)
+    @ApiOkResponse({
+        schema: {
+            example: {
+                message: 'El producto con el id 550e8400-e29b-41d4-a716-446655440000 ha sido eliminado'
+            }
+        }
+    })
+    async deleteProductController(@Param('id', new ParseUUIDPipe()) id: string) {
         const deletedProduct = await this.productsService.deleteProductService(id)
-        return res.status(200).json({ message: `El producto con el id ${deletedProduct.id} ha sido eliminado` })
+
+        return {
+            message: `El producto con el id ${deletedProduct.id} ha sido eliminado`
+        }
     }
 }
